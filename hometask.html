@@ -41,11 +41,30 @@
 
             </div>
         </li>
+        <li>
+            <div>
+                <input type="text" placeholder="1-я матрица" id="matrix1" class="matrix">     <input type="text" placeholder="2-я матрица" id="matrix2" class="matrix">
+                </div>
+            <br><br>
+            <div id="answer3">
+
+            </div><br>
+            <input type="button" value="Сложить" onclick="summatrix()">
+        </li>
     </ul>
 </div>
+
+
 </body>
 <script>
     $(".ch_filter").click(CreateArray)
+
+    //суммир матриц
+    function summatrix(){
+        m1 = ( document.getElementById('matrix1').val());
+        m1 = document.getElementById('matrix2');
+        console.log(m1.split('],['));
+    }
 
     function parseStr(){
         splarr = $("#dz1str").val().split(', ');
@@ -157,11 +176,11 @@
     //вывод отфильтрованных данных
     function show_result(data){
         elem = document.getElementById('answer2');
-        elem.innerHTML="<table>";
+        elem.innerHTML="<table><tbody>";
         var html_str = '';
 
         for (var i = 0; i< data.length; i++){
-            elem.innerHTML += "<tr><td>"+(i+1)+"</td><td><ul type='disc'>";
+            elem.innerHTML += "<tr><td><b>"+(i+1)+"</b></td><td><ul type=\"circle\">";
            // var s = JSON.stringify(data[i]);
             //console.log(s);
             var s = data[i];
@@ -170,14 +189,25 @@
             elem.innerHTML += "<li><b>Sex:</b> "+s.sex+"</li>";
             elem.innerHTML += "<li><b>Salary: </b>"+s.salary+"</li>";
             elem.innerHTML += "<li><b>Married: </b>"+(s.married?"yes":'no')+"</li>";
-             elem.innerHTML += "<li><b>Children:</b> </li>";
+             elem.innerHTML += "<li><b>Children:</b>"+(s.children.length?'':'-')+" </li>";
+             elem.innerHTML += "</ul></td><td></td></tr>";
+             for (var j = 0; j< s.children.length; j++) {
+                elem.innerHTML += "<tr><td><b>" + (j + 1) + "</b></td><td><ul type='square'>";
+                elem.innerHTML += "<li><b>Name:</b> "+s.children[j].name+"</li>";
+                elem.innerHTML += "<li><b>Age: </b>"+s.children[j].age+"</li>";
+                elem.innerHTML += "<li><b>Sex:</b> "+s.children[j].sex+"</li>";
+
+                elem.innerHTML += "</ul></td></tr>";
+            }
 
 
-            elem.innerHTML += "</ul></td></tr>";
+
             //console.log(sorted_persons);
         }
-        elem.innerHTML+="</table>";
+        elem.innerHTML+="</tbody></table>";
     }
+
+
 
 </script>
 </html>
