@@ -4,6 +4,7 @@
     <title>Домашка</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 
+
 </head>
 <body>
 <div>
@@ -44,9 +45,9 @@
         </li>
         <li>
             <div>
-                <input type="text" placeholder="1-я матрица" id="matrix1" class="matrix">     <input type="text" placeholder="2-я матрица" id="matrix2" class="matrix">
+                <input type="text" placeholder="1-я матрица" id="matrix1" class="matrix" value="[[[5,34],[4,32]],[[5,6],[6,89]],[[5,6],[6,89]]]">     <input type="text" placeholder="2-я матрица" id="matrix2" class="matrix" value="[[4],[5]]">
                 </div>
-            <br><br>
+            <br>
             <div id="answer3">
 
             </div><br>
@@ -55,13 +56,23 @@
 
         <li>
             <div>
+                <br>
                 <input type="text" placeholder="имя пользователя" id="usr_name" class="matrix">
                 </div>
-            <br><br>
-            <div id="answer4">
+            <br>
+            <input type="button" value="getName" onclick="user.getName()">
+           <input type="button" value="setName" onclick="user.setName( $('#usr_name').val())">
+        </li>
+        <li>
+            <br> <br>
+            <input type="button" value="Read" onclick="calculator.read()">
+           <input type="button" value="Sum" onclick="alert(calculator.sum())">
+            <input type="button" value="Multi" onclick="alert(calculator.multi())">
+        </li>
+        <li>
+            <br> <br>
+            <input type="button" value="Кофейку бы" onclick="coffeeMachine.start()">
 
-            </div><br>
-            <input type="button" value="Изменить" onclick="changeName()">
         </li>
     </ul>
 </div>
@@ -70,44 +81,97 @@
 
 
 </body>
-<script>
-        public class usr{
-            private string name;
 
-            public user(name='Petr'){
-                this.name = name;
+     <script>
+         //кофе машина
+		var coffeeMachine = new Object();
+        coffeeMachine["message"] = 'Ваш кофе готов';
+        coffeeMachine["start"]  = function (){
+              setTimeout(function() {coffeeMachine.end();}, 3000);
             }
-            public string getName(){
-                return this.name;
-            }
+         coffeeMachine["end"] = function () {
+             alert(this.message);
+         }
 
-            public void setName(name){
 
-                this.name = name;
-                 alert(this.name);
-             }
-    }
 
-    let user = new usr();
-    function changeName() {
-
-        var before = user.getName();
-        user.setName(document.getElementById('usr_name').val())
-
-        alert('имя до: '+before+'   '+'имя после: '+ user.getName())
-    }
     </script>
 
 
-<script>
-    $(".ch_filter").click(CreateArray)
+     <script>
+         //объект с методами
+		var user = new Object();
+        user["name"] = 'Ваня';
+        user["getName"]  = function (){
+                $('#usr_name').val(this.name)
+                console.log(this.name);
+                return this.name;
+            }
+        user["setName"]  = function (name){
+               this.name = name;
+               console.log(this.name);
+            }
 
-    //суммир матриц
+    </script>
+
+     <script>
+         //объект калькулятор
+		var calculator = new Object();
+        user["x"] = 0;
+        user["y"] = 0;
+        calculator["sum"]  = function (){
+                return (this.x + this.y);
+            }
+        calculator["multi"]  = function (){
+                return (this.x * this.y);
+            }
+       calculator["read"]  = function (){
+                this.x = parseInt(prompt("Ведите X: "));
+                this.y = parseInt(prompt("Ведите Y: "));
+
+            }
+
+    </script>
+
+<script>
+
+  //суммир матриц
     function summatrix(){
-        m1 = ( document.getElementById('matrix1').val());
-        m1 = document.getElementById('matrix2');
-        console.log(m1.split('],['));
+         var m1 = JSON.parse($("#matrix1").val());
+         var m2 = JSON.parse($("#matrix2").val());
+         //sm(m1,m2);
+         var res = sm(m1,m2)
+         if (res==null)
+                 $("#answer3").html("Разный размер матриц");
+         else
+                 $("#answer3").html(JSON.stringify(res));
+         console.log();       //console.log(m1.split('],['));
     }
+
+    function sm(m1,m2){
+        if (m1.length == m2.length){
+            if (m1.length>1){
+                var arr = new Object();
+                for (var i=0; i<m1.length;i++){
+                    arr[i] = sm(m1[i],m2[i])
+                    if (arr[i] == null) return null;
+                }
+                return  arr;
+            }
+            else
+                return parseInt(m1)+parseInt(m2);
+
+        }
+        else
+            return null;
+    }
+</script>
+
+
+<script>
+
+
+
 
     function parseStr(){
         splarr = $("#dz1str").val().split(', ');
@@ -116,8 +180,10 @@
         $("#answer1").text(splarr.join(', '));
         console.log(ind, splarr);
     }
+</script>
 
-
+<script>
+    $(".ch_filter").click(CreateArray)
 
     function CreateArray(){
 
