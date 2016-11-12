@@ -78,8 +78,16 @@
 
     function parseStr(){
         var splarr = $("#dz1str").val().split(', ');
-        var ind = splarr.indexOf($("#dz1del").val());
-        if (ind>0) splarr.splice(ind,1);
+        var ind =0;
+        while(true){
+            ind = splarr.indexOf($("#dz1del").val());
+            if (ind>=0) splarr.splice(ind,1);
+            else 
+                {
+                    break;
+                }
+        }
+
         $("#answer1").text(splarr.join(', '));
         console.log(ind, splarr);
     }
